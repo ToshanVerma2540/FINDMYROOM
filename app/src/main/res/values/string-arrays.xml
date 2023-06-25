@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="apartment_type">
+        <item>Independent</item>
+        <item>Under Family</item>
+        <item>Hostel</item>
+    </string-array>
+
+    <string-array name="room_type">
+        <item>Single Room</item>
+        <item>1bhk</item>
+        <item>2bhk</item>
+        <item>3bhk</item>
+        <item>4bhk</item>
+    </string-array>
+
+    <string-array name="prefferd_tennants">
+        <item>Boys</item>
+        <item>Girls</item>
+        <item>Family</item>
+        <item>Family &amp; Girls</item>
+    </string-array>
+
+    <string-array name="water_supply">
+        <item>Water Supply</item>
+        <item>HandPump</item>
+        <item>Nagar Palika</item>
+    </string-array>
+
+    <string-array name="kitchen">
+        <item>Kitchen</item>
+        <item>Sharing</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="bathroom">
+        <item>Bathroom</item>
+        <item>Sharing</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+</resources>

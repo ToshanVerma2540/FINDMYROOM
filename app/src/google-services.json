@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "739691368666",
+    "project_id": "forkshiv",
+    "storage_bucket": "forkshiv.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739691368666:android:8e32add1f3ac0fbe96d5e3",
+        "android_client_info": {
+          "package_name": "com.example.forkshiv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "739691368666-oonibp0bvu7k13j5fqcn1a6a8toforqk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.forkshiv",
+            "certificate_hash": "f4f29d2b8b3bf38cf0ec14c71549f4ddb1864ddb"
+          }
+        },
+        {
+          "client_id": "739691368666-106jbi9784jfn37g48janvi9j665r5fb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATQGTTPFigkaMayOZ0OkexJ2KkVgOgzS8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "739691368666-106jbi9784jfn37g48janvi9j665r5fb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

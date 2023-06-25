@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">ForKshiv</string>
+    <string name="let_s_get_you_in">Lets Get You In!</string>
+    <string name="send_otp"><u>Send OTP</u></string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="otp">OTP</string>
+    <string name="room_type">Room Type</string>
+    <string name="apartment_type">Apartment Type</string>
+    <string name="preffered_tennants">Preffered Tennats</string>
+    <string name="Expected_Rent">Expected Rent</string>
+    <string name="save_and_continue">save and continue</string>
+    <string name="add_room">Add Your Room</string>
+    <string name="total_floor">Total Floor</string>
+    <string name="floor_no">Floor no.</string>
+    <string name="other_amenties">Other Amenties</string>
+    <string name="bed">Bed</string>
+    <string name="Cooler">Cooler</string>
+    <string name="freez">Freez</string>
+    <string name="ac">Air Conditioner</string>
+    <string name="tv">Television</string>
+    <string name="city">City</string>
+    <string name="change_num">Change Number</string>
+    <string name="photos">Photos</string>
+    <string name="locality_details">Locality Details</string>
+    <string name="basic_details">Basic Details</string>
+    <string name="add_your_room">ADD YOUR ROOM</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="findmyroom">FINDMYROOM</string>
+    <string name="favourite">favourite</string>
+    <string name="log_out">Log Out</string>
+    <string name="findmyroom2">"               FINDMYROOM"</string>
+    <string name="hostel_for">HOSTEL FOR</string>
+    <string name="room_for">ROOM FOR</string>
+    <string name="Rent_Out">RENT OUT</string>
+    <string name="delete_crime">Delete</string>
+    <string name="title_activity_maps">Map</string>
+</resources>
