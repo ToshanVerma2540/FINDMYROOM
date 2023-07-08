@@ -119,6 +119,7 @@ public class BasicDetailsFragment extends ConstantlyUsedFragment {
                 if(acCheckbox.isChecked())roomDetails.ac = true;
                 if(freezCheckbox.isChecked())roomDetails.freez = true;
                 if(tvCheckbox.isChecked())roomDetails.television = true;
+                AddRoomActivity.count = 1;
                 //Adding data to the firestore
 
                  if(roomDetails.productId ==""||roomDetails.productId.length()<=0) {
@@ -136,6 +137,11 @@ public class BasicDetailsFragment extends ConstantlyUsedFragment {
         return v;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        AddRoomActivity.count = 1;
+        super.onAttach(context);
+    }
 
     //initializing the spinners
     public void initializeSpinner(Spinner spinner, int arrayId){

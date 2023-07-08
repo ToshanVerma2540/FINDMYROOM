@@ -61,10 +61,14 @@ public class FavoriteActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(adapter);
         get();
-
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-
+    @Override
+    public boolean onSupportNavigateUp() {
+            onBackPressed();
+        return true;
+    }
     public void get(){
         db.collection(constants.FAVORITE).
                 whereEqualTo(constants.USER_ID, FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -96,7 +100,7 @@ public class FavoriteActivity extends AppCompatActivity {
                     al.add(model);
                 }
                 if(al.isEmpty()){
-                    textView.setVisibility(View.VISIBLE);
+                   textView.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }else{
                     recyclerView.setVisibility(View.VISIBLE);

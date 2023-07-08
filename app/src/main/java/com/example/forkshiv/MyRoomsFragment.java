@@ -1,5 +1,6 @@
 package com.example.forkshiv;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,8 +8,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,8 +25,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.forkshiv.Models.AddRoomModels;
@@ -42,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class MyRoomsFragment extends ConstantlyUsedFragment {
@@ -52,8 +63,12 @@ public class MyRoomsFragment extends ConstantlyUsedFragment {
     Constants constants;
     FirebaseFirestore db;
    public boolean isContexualMode = false;
-     HashSet<Integer> selected =  new HashSet<>();
-    public Toolbar toolbar;
+     HashSet<Item> selected;
+     Button deleteButton;
+     Button cancelButton;
+     int count = 0;
+     TextView noRoomTextView;
+    private OnBackPressedCallback onBackPressedCallback;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,12 +80,29 @@ public class MyRoomsFragment extends ConstantlyUsedFragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_my_rooms, container, false);
         myRooms = new ArrayList<>();
-        toolbar = v.findViewById(R.id.toolbar);
-        getActivity().setActionBar(toolbar);
-        getActivity().getActionBar().setTitle("");
-        getActivity().getActionBar().setIcon(R.drawable.your_room);
-       // toolbar.inflateMenu(R.menu.delete_menu);
+//         ActionBar actionBar = getActivity().getActionBar();
+//       actionBar.setTitle("");
+//         getActivity().getActionBar().setIcon(R.drawable.your_room);
+        noRoomTextView = v.findViewById(R.id.no_room_tv);
+        onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if(count ==1){
+                    unselect();
+                }else {
+                    ImageButton button = getActivity().findViewById(R.id.home_image_button);
+                    ImageButton roombt = getActivity().findViewById(R.id.myroom_image_button);
+                    roombt.setImageResource(R.drawable.my_room_outlined);
+                    button.setImageResource(R.drawable.home_filled);
+                    replaceFragment(new HomeFragment());
+                }
+            }
+        };
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), onBackPressedCallback);
         firestoreClassObj = new FirestoreClass();
+        deleteButton = v.findViewById(R.id.delete_button);
+        cancelButton = v.findViewById(R.id.cancel_bt);
         selected = new HashSet<>();
         constants = new Constants();
         isContexualMode = false;
@@ -78,9 +110,9 @@ public class MyRoomsFragment extends ConstantlyUsedFragment {
         get(getActivity());
         adapter = new BigListAdapter2(getActivity(), myRooms, new BigListAdapter2.OnItemClickListener() {
             @Override
-            public void onItemClick(CheckBox checkBox,int position) {
+            public void onItemClick(int position,View view) {
                  if(isContexualMode == true){
-                     startSelection(position,checkBox);
+                     startSelection(position,view);
                  }else{
                      Intent intent = new Intent(getActivity(),RoomDetailedActivity.class);
                      intent.putExtra("RoomFragment",true);
@@ -89,8 +121,11 @@ public class MyRoomsFragment extends ConstantlyUsedFragment {
             }
         }, new BigListAdapter2.OnItemLongClickListener() {
             @Override
-            public void onItemLongClick(CheckBox checkBox, int position) {
-                startSelection(position,checkBox);
+            public void onItemLongClick(int position,View view) {
+                //if(getActivity().getActionBar() != null) {
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+             //   }
+                startSelection(position,view);
             }
         });
         rv = v.findViewById(R.id.myroom_rv);
@@ -99,22 +134,27 @@ public class MyRoomsFragment extends ConstantlyUsedFragment {
         rv.setAdapter(adapter);
         // adapter.notifyDataSetChanged();
 
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                unselect();
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDeleteConfirmationDialog();
+            }
+        });
         return v;
     }
-
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+    public void onDestroyView() {
+        super.onDestroyView();
+        onBackPressedCallback.remove();
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.menu_item_delete_room){
-            showDeleteConfirmationDialog();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     //getting the added products of the user
     public void get(FragmentActivity activity){
         showProgressDialog(activity);
@@ -148,6 +188,11 @@ public class MyRoomsFragment extends ConstantlyUsedFragment {
                     myRooms.add(model);
                     adapter.notifyDataSetChanged();
                 }
+                if(myRooms.isEmpty()){
+                    noRoomTextView.setVisibility(View.VISIBLE);
+                }else{
+                    noRoomTextView.setVisibility(View.GONE);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -158,38 +203,71 @@ public class MyRoomsFragment extends ConstantlyUsedFragment {
     }
 
     //selecting and unselecting items
-    public void startSelection(int position,CheckBox checkBox){
-        if(selected.isEmpty()){
-            selected.add(position);
-            checkBox.setVisibility(View.VISIBLE);
-            checkBox.setChecked(true);
+    public void startSelection(int position,View view) {
+        if (selected.isEmpty()) {
+            selected.add(new Item(position,view));
+            view.setBackgroundColor(getResources().getColor(R.color.primary_color_50));
+//            if (actionBar != null) {
+//                actionBar.hide();
+//            }
+            deleteButton.setVisibility(View.VISIBLE);
+            cancelButton.setVisibility(View.VISIBLE);
+            count = 1;
             isContexualMode = true;
-            toolbar.inflateMenu(R.menu.delete_menu);
-        }
-       else if(!selected.isEmpty()&&selected.contains(position)){
-            selected.remove(position);
-            checkBox.setChecked(false);
-            checkBox.setVisibility(View.GONE);
-            if(selected.size() == 0){
-                toolbar.getMenu().clear();
+        } else if (!selected.isEmpty() && selected.contains(new Item(position,view))) {
+            Item item = new Item(position,view);
+            selected.remove(item);
+            view.setBackgroundColor(getResources().getColor(R.color.white));
+            if (selected.size() == 0) {
+                deleteButton.setVisibility(View.GONE);
+                cancelButton.setVisibility(View.GONE);
+              //  getAction.show();
+                ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+                count = 0;
                 isContexualMode = false;
             }
-        }else{
-            selected.add(position);
-            checkBox.setVisibility(View.VISIBLE);
-            checkBox.setChecked(true);
+        }else {
+            selected.add(new Item(position,view));
+            count =1;
+            view.setBackgroundColor(getResources().getColor(R.color.primary_color_50));
+            isContexualMode = true;
         }
-     //  adapter.notifyDataSetChanged();
     }
 
+    public void unselect(){
+        List<Item> dataList = new ArrayList<>(selected);
+        for(int i =0;i<dataList.size();i++){
+           dataList.get(i).view.setBackgroundColor(getResources().getColor(R.color.white));
+        }
+        cancelButton.setVisibility(View.GONE);
+        deleteButton.setVisibility(View.GONE);
+        isContexualMode = false;
+        count = 0;
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        selected.clear();
+    }
+    public void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container,fragment);
+
+        fragmentTransaction.commit();
+    }
     //deleting the selected items
     public void deleteSelected(){
-        for(int i =0;i<myRooms.size();i++){
-           if(selected.contains(i)){
-               AddRoomModels models = myRooms.remove(i);
-               deleteFromDatabase(models);
-           }
-        }
+           // showProgressDialog();
+            List<Item> dataList = new ArrayList<>(selected);
+            for(int i =0;i<dataList.size();i++){
+                deleteFromDatabase(myRooms.get(dataList.get(i).position));
+                myRooms.remove(dataList.get(i).position);
+            }
+           // hideProgressDialog();
+          //  Toast.makeText(getApplicationContext(), "Notes deleted", Toast.LENGTH_SHORT).show();
+            cancelButton.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.GONE);
+            isContexualMode = false;
+           ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+            selected.clear();
         adapter.notifyDataSetChanged();
     }
 
@@ -223,10 +301,43 @@ public class MyRoomsFragment extends ConstantlyUsedFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Perform delete action here
                        deleteSelected();
+                       count = 0;
                     }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        unselect();
+                        count = 0;
+                    }
+                })
                 .show();
+    }
+    public class Item {
+        int position;
+        View view;
+
+        public Item(int position, View view) {
+            this.position = position;
+            this.view = view;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (other == null || getClass() != other.getClass()) {
+                return false;
+            }
+            Item otherItem = (Item) other;
+            return position == otherItem.position && Objects.equals(view, otherItem.view);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(position, view);
+        }
     }
 
 }

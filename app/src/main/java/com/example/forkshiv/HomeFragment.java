@@ -1,6 +1,7 @@
 package com.example.forkshiv;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -23,6 +24,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -73,6 +75,10 @@ public class HomeFragment extends Fragment {
          currentUser = mAuth.getCurrentUser();
         constants = new Constants();
         //implementing the search from searchview
+        searchView.setIconified(false);
+        searchView.clearFocus();
+        // Hide the focus and keyboard
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -191,5 +197,11 @@ public class HomeFragment extends Fragment {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        searchView.clearFocus();
+        super.onResume();
     }
 }

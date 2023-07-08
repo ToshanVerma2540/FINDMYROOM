@@ -24,6 +24,7 @@ public class AddRoomActivity extends AppCompatActivity {
 
    static Button basicDetailsBt, localityDetailsBt,photosBt;
    static boolean isCompleted = false;
+   static int count;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +32,7 @@ public class AddRoomActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
+        count = 0;
         setContentView(R.layout.activity_add_room);
 
         basicDetailsBt = findViewById(R.id.basic_details_tv);
@@ -68,7 +70,20 @@ public class AddRoomActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if(count == 2){
+            basicDetailsBt.setTextColor(getResources().getColor(R.color.primary_color));
+            localityDetailsBt.setTextColor(getResources().getColor(R.color.black));
+            replaceFragment(new BasicDetailsFragment());
+        }else if(count == 3){
+            photosBt.setTextColor(getResources().getColor(R.color.black));
+            localityDetailsBt.setTextColor(getResources().getColor(R.color.primary_color));
+            replaceFragment(new LocalityDetailsFragment());
+        }else{
+            super.onBackPressed();
+        }
+    }
 
     //launcing the another fragment
     public void replaceFragment(Fragment fragment){

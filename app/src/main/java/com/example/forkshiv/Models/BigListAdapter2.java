@@ -1,39 +1,47 @@
 package com.example.forkshiv.Models;
 
 import android.content.Context;
-import android.graphics.Color;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.forkshiv.Constants;
-import com.example.forkshiv.MyRoomsFragment;
+
 import com.example.forkshiv.R;
 import com.smarteist.autoimageslider.SliderView;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+
 
 
 public class BigListAdapter2 extends RecyclerView.Adapter<BigListAdapter2.ViewHolder>{
     ArrayList<AddRoomModels> list;
     Context context;
     Constants constants = new Constants();
-     OnItemClickListener listener;
-     OnItemLongClickListener onItemLongClickListener;
+//     OnItemClickListener listener;
+//     OnItemLongClickListener onItemLongClickListener;
+//    public interface OnItemClickListener {
+//        void onItemClick(CheckBox checkBox,int position);
+//    }
+//    public interface OnItemLongClickListener {
+//        void onItemLongClick(CheckBox checkBox,int position);
+//    }
+OnItemClickListener listener;
+    OnItemLongClickListener onItemLongClickListener;
     public interface OnItemClickListener {
-        void onItemClick(CheckBox checkBox,int position);
+        void onItemClick(int position,View view);
     }
     public interface OnItemLongClickListener {
-        void onItemLongClick(CheckBox checkBox,int position);
+        void onItemLongClick(int position,View view);
     }
     public BigListAdapter2(Context context, ArrayList<AddRoomModels> list, OnItemClickListener listener,
     OnItemLongClickListener onItemLongClickListener) {
@@ -66,12 +74,12 @@ public class BigListAdapter2 extends RecyclerView.Adapter<BigListAdapter2.ViewHo
 
         holder.cityAreaTv.setText(model.city);
         holder.typeTennantTv.setText(constants.roomType[(int)model.roomType+1]+" - "+ constants.prefferedTennants[(int)model.prefferdTennats+1]);
-        holder.expectedRentTv.setText(model.expectedRent);
+        holder.expectedRentTv.setText("\u20B9"+model.expectedRent);
         holder.localityTv.setText(model.locality);
-        holder.bind(position,holder.checkBox);
-        holder.click(position,holder.checkBox);
+        holder.bind(position,holder.itemView);
+        holder.click(position,holder.itemView);
         //holder.cardView.setBackgroundResource(R.drawable.item_backgroud);
-        holder.checkBox.setVisibility(View.GONE);
+     //   holder.checkBox.setVisibility(View.GONE);
     }
 
     @Override
@@ -85,7 +93,7 @@ public class BigListAdapter2 extends RecyclerView.Adapter<BigListAdapter2.ViewHo
         TextView localityTv;
         TextView cityAreaTv;
         TextView expectedRentTv;
-        CheckBox checkBox;
+        //CheckBox checkBox;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             sliderView = itemView.findViewById(R.id.slider_view);
@@ -93,21 +101,23 @@ public class BigListAdapter2 extends RecyclerView.Adapter<BigListAdapter2.ViewHo
             localityTv = itemView.findViewById((R.id.locality_tv));
             cityAreaTv = itemView.findViewById((R.id.city_area_tv));
             expectedRentTv = itemView.findViewById((R.id.rent_tv));
-            checkBox = itemView.findViewById(R.id.checkbox);
+           // checkBox = itemView.findViewById(R.id.checkbox);
         }
-        public void bind(int position,CheckBox checkBox){
+        public void bind(int position,View view){
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                    listener.onItemClick(checkBox,position);
+                  //  listener.onItemClick(checkBox,position);
+                    listener.onItemClick(position,view);
                 }
             });
         }
 
-        public void click(int position,CheckBox checkBox){
+        public void click(int position,View view){
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    onItemLongClickListener.onItemLongClick(checkBox,position);
+                   // onItemLongClickListener.onItemLongClick(checkBox,position);
+                    onItemLongClickListener.onItemLongClick(position,view);
                     return true;
                 }
             });

@@ -16,10 +16,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -51,11 +54,11 @@ public class LocalityDetailsFragment extends ConstantlyUsedFragment{
     ConstraintLayout contraintLayout;
      FirebaseFirestore db;
      SerializeLocation serializeLocationObj;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_locality_details, parent, false);
+        AddRoomActivity.count = 2;
       //initializing fields
         cityEt = (EditText)v.findViewById(R.id.city_editText);
         localityEt = (EditText)v.findViewById(R.id.locality_editText);
@@ -82,14 +85,18 @@ public class LocalityDetailsFragment extends ConstantlyUsedFragment{
                        AddRoomActivity.basicDetailsBt.setTextColor(getResources().getColor(R.color.black));
                        AddRoomActivity.localityDetailsBt.setTextColor(getResources().getColor(R.color.black));
                        AddRoomActivity.photosBt.setTextColor(getResources().getColor(R.color.primary_color));
-                       BasicDetailsFragment.constantlyUsedFragment.moveToNextFragment(R.id.fragment_container, new UploadImagesFragment(),
-                               getActivity());
+                       replaceFragment(new UploadImagesFragment());
                    }
            }
        });
 
-
         return v;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        AddRoomActivity.count = 2;
+        super.onAttach(context);
     }
 
     //validating before uploading
@@ -195,5 +202,12 @@ public class LocalityDetailsFragment extends ConstantlyUsedFragment{
 //            this.locality = locality;
 //            this.city = city;
 //        }
+    }
+    public void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container,fragment);
+
+        fragmentTransaction.commit();
     }
 }

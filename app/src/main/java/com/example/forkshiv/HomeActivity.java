@@ -72,9 +72,9 @@ public class HomeActivity extends AppCompatActivity {
                     //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }else {
-                    if(actionBar != null) {
-                        actionBar.hide();
-                    }
+//                    if(actionBar != null) {
+//                        actionBar.hide();
+//                    }
                     setIcon(R.drawable.my_room_filled,myRoomsImagebt);
                     setIcon(R.drawable.home_outlined,homeImagebt);
                     replaceFragment(new MyRoomsFragment());

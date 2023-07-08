@@ -61,10 +61,9 @@ public class BigListAdapter extends RecyclerView.Adapter<BigListAdapter.ViewHold
 
         holder.cityAreaTv.setText(model.city);
         holder.typeTennantTv.setText(constants.roomType[(int)model.roomType+1]+" - "+ constants.prefferedTennants[(int)model.prefferdTennats+1]);
-        holder.expectedRentTv.setText(model.expectedRent);
+        holder.expectedRentTv.setText("\u20B9"+model.expectedRent);
         holder.localityTv.setText(model.locality);
         holder.bind(position);
-        holder.checkBox.setVisibility(View.GONE);
     }
 
     @Override
@@ -78,7 +77,6 @@ public class BigListAdapter extends RecyclerView.Adapter<BigListAdapter.ViewHold
         TextView localityTv;
         TextView cityAreaTv;
         TextView expectedRentTv;
-        CheckBox checkBox;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             sliderView = itemView.findViewById(R.id.slider_view);
@@ -86,7 +84,6 @@ public class BigListAdapter extends RecyclerView.Adapter<BigListAdapter.ViewHold
             localityTv = itemView.findViewById((R.id.locality_tv));
             cityAreaTv = itemView.findViewById((R.id.city_area_tv));
             expectedRentTv = itemView.findViewById((R.id.rent_tv));
-            checkBox = itemView.findViewById(R.id.checkbox);
         }
         public void bind(int position){
             itemView.setOnClickListener(new View.OnClickListener() {

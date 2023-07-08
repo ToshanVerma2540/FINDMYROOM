@@ -1,10 +1,13 @@
 package com.example.forkshiv;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -87,6 +91,7 @@ public class UploadImagesFragment extends ConstantlyUsedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_upload_images, parent, false);
+        AddRoomActivity.count = 3;
         //initializing buttons and recyclerview
         uploadImages = (Button) v.findViewById(R.id.uploadImage_button);
         imagesRv =  v.findViewById(R.id.images_rv);
@@ -140,6 +145,11 @@ public class UploadImagesFragment extends ConstantlyUsedFragment {
         return v;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        AddRoomActivity.count = 3;
+        super.onAttach(context);
+    }
 
     //checking that user has granted permission or not
     @Override
@@ -211,5 +221,11 @@ public class UploadImagesFragment extends ConstantlyUsedFragment {
             }
         });
     }
+    public void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container,fragment);
 
+        fragmentTransaction.commit();
+    }
 }

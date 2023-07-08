@@ -35,7 +35,9 @@ public class ConstantlyUsedFragment extends Fragment {
         progressDialog.show();
     }
     public void hideProgressDialog(){
-        progressDialog.dismiss();
+        if (!isDetached() && progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     public void moveToNextFragment(int container,Fragment fragment,FragmentActivity activity){

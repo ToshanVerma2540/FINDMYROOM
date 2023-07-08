@@ -173,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //sending opt to the given phone number
     public void initiateotp(){
-        PhoneAuthProvider.getInstance().verifyPhoneNumber("+91" +phoneNumber,
+        PhoneAuthProvider.getInstance().verifyPhoneNumber( "+91" +phoneNumber,
                 60,
                 TimeUnit.SECONDS,
                 this,
